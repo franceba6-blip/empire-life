@@ -3,14 +3,14 @@ import { router } from 'expo-router';
 import { Card, Label, Money, PrimaryButton, SectionTitle } from '@/components/ui';
 import { useGameStore } from '@/store/gameStore';
 import { monthlyExpenses, monthlyIncome, netWorth, totalBankDebt, totalPersonalDebt } from '@/game/economy/economy';
-import { ageAt, formatGameDate } from '@/game/time/time';
+import { ageAt, formatGameDate, formatGameTime } from '@/game/time/time';
 import { colors, spacing } from '@/theme';
 
 export default function Home() {
   const game = useGameStore(s => s.game)!; const advance = useGameStore(s => s.advanceDay);
   const income = monthlyIncome(game), expenses = monthlyExpenses(game);
   return <ScrollView style={styles.root} contentContainerStyle={styles.content}>
-    <View style={styles.header}><View><Text style={styles.hello}>WELCOME BACK</Text><Text style={styles.name}>{game.player.firstName}</Text></View><View style={styles.date}><Text style={styles.dateText}>{formatGameDate(game.date)}</Text><Text style={styles.age}>AGE {ageAt(game.player.birthYear, game.date)}</Text></View></View>
+    <View style={styles.header}><View><Text style={styles.hello}>WELCOME BACK</Text><Text style={styles.name}>{game.player.firstName}</Text></View><View style={styles.date}><Text style={styles.dateText}>{formatGameTime(game)}</Text><Text style={styles.age}>AGE {ageAt(game.player.birthYear, game.date)}</Text></View></View>
     <Card style={styles.hero}><Label>Available cash</Label><Money value={game.cash} large /><View style={styles.heroBottom}><View><Label>Net worth</Label><Money value={netWorth(game)} /></View><View><Label>Cashflow</Label><Text style={[styles.flow, { color: income - expenses >= 0 ? colors.green : colors.red }]}>{income - expenses >= 0 ? '+' : '-'}€{Math.abs(income - expenses).toLocaleString()}</Text></View></View></Card>
     <View style={styles.grid}><Card style={styles.small}><Label>Income</Label><Money value={income} /></Card><Card style={styles.small}><Label>Expenses</Label><Money value={expenses} /></Card><Card style={styles.small}><Label>Bank debt</Label><Money value={totalBankDebt(game)} /></Card><Card style={styles.small}><Label>Family debt</Label><Money value={totalPersonalDebt(game)} /></Card></View>
     <SectionTitle>Quick actions</SectionTitle><View style={styles.actions}><PrimaryButton title="EARN MONEY" onPress={() => router.push('/earn')} /><PrimaryButton title="BANK" tone="dark" onPress={() => router.push('/bank')} /><PrimaryButton title="FAMILY" tone="dark" onPress={() => router.push('/family')} /><PrimaryButton title="+1 DAY" tone="dark" onPress={() => { advance(); Alert.alert('A new day', 'Listings were checked for buyers.'); }} /></View>
