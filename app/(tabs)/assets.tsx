@@ -1,0 +1,1 @@
+import { ComingSoon } from '@/components/ComingSoon'; export default function Assets(){return <ComingSoon title="Assets" copy="Real estate, vehicles, luxury and investments will grow your empire." icon="diamond"/>}

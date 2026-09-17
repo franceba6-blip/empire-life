@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Empire Life",
+    "slug": "empire-life",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "empirelife",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.empirelife.game" },
+    "android": { "package": "com.empirelife.game", "adaptiveIcon": { "backgroundColor": "#080B12" } },
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true }
+  }
+}

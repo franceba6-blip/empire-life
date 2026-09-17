@@ -1,0 +1,1 @@
+import { ComingSoon } from '@/components/ComingSoon'; export default function Life(){return <ComingSoon title="Life" copy="Relationships, family, friends and the choices that shape your legacy." icon="heart"/>}
