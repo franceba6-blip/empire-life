@@ -45,8 +45,26 @@ the same central clock as ordinary gameplay. Restarting the app opens normal
 progress. Test resets/new games stay in the test slot. This debug panel is
 explicitly labelled and intentionally available in this testing release.
 
-Save schema 3 migrates Prompt 01/02 saves under the original normal-save key;
+Save schema 5 migrates Prompt 01–04 saves under the original normal-save key;
 the test slot uses a different key. Writes are serialized to prevent stale writes.
+
+## Prompt 04–05 — Staff and car dealership
+
+Open **Business → Staff / Management** to hire, develop, promote and delegate
+work to employees. Salaries, morale, workload, training and automation advance
+through the central game clock. Employee expenses reduce real business profit.
+
+Open **Business → Car Dealership** to start a small, medium or premium fictional
+dealership. The module includes a seven-day wholesale market, deterministic
+vehicle valuation, inspections, negotiation, workshop repairs, cosmetic
+preparation, showroom capacity, price strategies, customer matching, sales,
+reputation, holding costs, expansions and multiple-location data. Vehicle
+Buyer, Salesperson, Mechanic, Detailer and Dealership Manager roles affect real
+outcomes. Full management can source, process, list and sell stock dynamically.
+All brands are fictional and no vehicle logos or paid assets are used.
+
+The isolated test save additionally provides vehicle scenarios, elite staff,
+instant work completion, reputation/capacity controls and forced sales.
 
 Validation: `npm test`, `npm run typecheck`, `npx expo-doctor`,
 `npx expo export --platform ios`. Expo generates route types when starting the

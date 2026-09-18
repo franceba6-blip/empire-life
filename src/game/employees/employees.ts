@@ -55,6 +55,13 @@ const candidateSeeds: Array<{
   { firstName: "Sofia", lastName: "Moretti", role: "TEAM_LEADER", base: 82, reliability: 86, salary: 4700, leadership: 83, traits: ["ORGANIZED", "AMBITIOUS"] },
   { firstName: "Jonas", lastName: "Voss", role: "BUSINESS_MANAGER", base: 78, reliability: 70, salary: 7200, leadership: 79, traits: ["EXPENSIVE", "NEGOTIATOR"] },
   { firstName: "Elena", lastName: "Fischer", role: "GENERAL_MANAGER", base: 91, reliability: 93, salary: 14500, leadership: 94, traits: ["LOYAL", "ORGANIZED"] },
+  { firstName: "Luca", lastName: "Marin", role: "VEHICLE_BUYER", base: 79, reliability: 84, salary: 4200, leadership: 55, traits: ["NEGOTIATOR", "AMBITIOUS"] },
+  { firstName: "Nina", lastName: "Wolf", role: "SALESPERSON", base: 75, reliability: 80, salary: 3600, leadership: 58, traits: ["NEGOTIATOR"] },
+  { firstName: "Emir", lastName: "Kaya", role: "MECHANIC", base: 83, reliability: 91, salary: 4800, leadership: 48, traits: ["ORGANIZED", "LOYAL"] },
+  { firstName: "Mia", lastName: "Hartmann", role: "DETAILER", base: 77, reliability: 88, salary: 3300, leadership: 44, traits: ["ORGANIZED"] },
+  { firstName: "Paul", lastName: "Neumann", role: "INVENTORY_MANAGER", base: 72, reliability: 86, salary: 5100, leadership: 70, traits: ["LOYAL"] },
+  { firstName: "Laura", lastName: "Winter", role: "SALES_MANAGER", base: 85, reliability: 82, salary: 6900, leadership: 84, traits: ["AMBITIOUS", "NEGOTIATOR"] },
+  { firstName: "Mateo", lastName: "Rossi", role: "DEALERSHIP_MANAGER", base: 88, reliability: 90, salary: 9800, leadership: 91, traits: ["ORGANIZED", "NEGOTIATOR"] },
 ];
 
 export function generateCandidates(
@@ -228,6 +235,13 @@ const nextRole: Partial<Record<EmployeeRole, EmployeeRole>> = {
   OPERATIONS_ASSISTANT: "TEAM_LEADER",
   TEAM_LEADER: "BUSINESS_MANAGER",
   BUSINESS_MANAGER: "GENERAL_MANAGER",
+  VEHICLE_BUYER: "INVENTORY_MANAGER",
+  SALESPERSON: "SALES_MANAGER",
+  MECHANIC: "DEALERSHIP_MANAGER",
+  DETAILER: "INVENTORY_MANAGER",
+  INVENTORY_MANAGER: "DEALERSHIP_MANAGER",
+  SALES_MANAGER: "DEALERSHIP_MANAGER",
+  DEALERSHIP_MANAGER: "GENERAL_MANAGER",
 };
 
 export function promoteEmployee(state: GameState, employeeId: string): GameState {
@@ -355,7 +369,7 @@ export function assignTask(
       (x) => x.id === employeeId && x.businessId === businessId,
     );
     if (!employee) throw new Error("Select an active employee");
-    const managerRole = ["TEAM_LEADER", "BUSINESS_MANAGER", "GENERAL_MANAGER"].includes(employee.role);
+    const managerRole = ["TEAM_LEADER", "BUSINESS_MANAGER", "GENERAL_MANAGER", "SALES_MANAGER", "DEALERSHIP_MANAGER", "INVENTORY_MANAGER"].includes(employee.role);
     if (mode === "MANAGER" && !managerRole)
       throw new Error("This task requires a manager");
     if (mode === "EMPLOYEE" && !ROLE_TASKS[employee.role].includes(task))
@@ -396,7 +410,7 @@ export function setManagementMode(
   const manager = managerId
     ? state.staff.employees.find((x) => x.id === managerId && x.businessId === businessId)
     : undefined;
-  if (mode === "FULLY_MANAGED" && (!manager || !["BUSINESS_MANAGER", "GENERAL_MANAGER"].includes(manager.role)))
+  if (mode === "FULLY_MANAGED" && (!manager || !["BUSINESS_MANAGER", "GENERAL_MANAGER", "DEALERSHIP_MANAGER"].includes(manager.role)))
     throw new Error("Full management requires a Business or General Manager");
   let next: GameState = {
     ...state,
@@ -454,7 +468,7 @@ export function calculateAutomationEfficiency(
     return clamp(base, 55, 98);
   });
   const quality = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-  const coverage = delegated.length / STAFF_TASKS.length;
+  const coverage = delegated.length / Math.max(1, business.management.delegations.length);
   return Math.round(clamp(quality * (business.management.mode === "FULLY_MANAGED" ? 0.98 : 0.75 + coverage * 0.2), 0, 98));
 }
 
@@ -508,7 +522,7 @@ function processSalary(state: GameState, employee: Employee): GameState {
 
 function processAutomation(state: GameState, businessId: string): GameState {
   const business = state.businesses.find((x) => x.id === businessId);
-  if (!business || !business.management.automationEfficiency) return state;
+  if (!business || business.type !== "RESELLING" || !business.management.automationEfficiency) return state;
   const assignment = (task: StaffTask) =>
     business.management.delegations.find((x) => x.task === task && x.mode !== "SELF");
   let next = state;

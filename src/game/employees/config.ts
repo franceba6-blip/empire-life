@@ -12,6 +12,13 @@ export const ROLE_LABELS: Record<EmployeeRole, string> = {
   TEAM_LEADER: "Team Leader",
   BUSINESS_MANAGER: "Business Manager",
   GENERAL_MANAGER: "General Manager",
+  VEHICLE_BUYER: "Vehicle Buyer",
+  SALESPERSON: "Salesperson",
+  MECHANIC: "Mechanic",
+  DETAILER: "Detailer",
+  INVENTORY_MANAGER: "Inventory Manager",
+  SALES_MANAGER: "Sales Manager",
+  DEALERSHIP_MANAGER: "Dealership Manager",
 };
 
 export const TRAIT_LABELS: Record<EmployeeTrait, string> = {
@@ -35,6 +42,16 @@ export const STAFF_TASKS: StaffTask[] = [
   "SELLING",
   "INVENTORY_HANDLING",
 ];
+export const DEALERSHIP_TASKS: StaffTask[] = [
+  "VEHICLE_SOURCING",
+  "VEHICLE_BUYING",
+  "VEHICLE_INSPECTION",
+  "VEHICLE_REPAIR",
+  "VEHICLE_PREPARATION",
+  "VEHICLE_LISTING",
+  "VEHICLE_PRICING",
+  "VEHICLE_SALES",
+];
 
 export const TASK_LABELS: Record<StaffTask, string> = {
   PRODUCT_SOURCING: "Product Sourcing",
@@ -43,6 +60,14 @@ export const TASK_LABELS: Record<StaffTask, string> = {
   PRICING_ASSISTANCE: "Pricing Assistance",
   SELLING: "Selling",
   INVENTORY_HANDLING: "Inventory Handling",
+  VEHICLE_SOURCING: "Vehicle Sourcing",
+  VEHICLE_BUYING: "Vehicle Buying",
+  VEHICLE_INSPECTION: "Vehicle Inspection",
+  VEHICLE_REPAIR: "Vehicle Repair",
+  VEHICLE_PREPARATION: "Vehicle Preparation",
+  VEHICLE_LISTING: "Vehicle Listing",
+  VEHICLE_PRICING: "Vehicle Pricing",
+  VEHICLE_SALES: "Vehicle Sales",
 };
 
 export const ROLE_TASKS: Record<EmployeeRole, StaffTask[]> = {
@@ -52,7 +77,23 @@ export const ROLE_TASKS: Record<EmployeeRole, StaffTask[]> = {
   OPERATIONS_ASSISTANT: ["LISTING", "INVENTORY_HANDLING"],
   TEAM_LEADER: STAFF_TASKS,
   BUSINESS_MANAGER: STAFF_TASKS,
-  GENERAL_MANAGER: STAFF_TASKS,
+  GENERAL_MANAGER: [...STAFF_TASKS, ...DEALERSHIP_TASKS],
+  VEHICLE_BUYER: ["VEHICLE_SOURCING", "VEHICLE_BUYING", "VEHICLE_INSPECTION"],
+  SALESPERSON: ["VEHICLE_LISTING", "VEHICLE_PRICING", "VEHICLE_SALES"],
+  MECHANIC: ["VEHICLE_INSPECTION", "VEHICLE_REPAIR"],
+  DETAILER: ["VEHICLE_PREPARATION"],
+  INVENTORY_MANAGER: ["VEHICLE_SOURCING", "VEHICLE_LISTING", "INVENTORY_HANDLING"],
+  SALES_MANAGER: ["VEHICLE_LISTING", "VEHICLE_PRICING", "VEHICLE_SALES"],
+  DEALERSHIP_MANAGER: [
+    "VEHICLE_SOURCING",
+    "VEHICLE_BUYING",
+    "VEHICLE_INSPECTION",
+    "VEHICLE_REPAIR",
+    "VEHICLE_PREPARATION",
+    "VEHICLE_LISTING",
+    "VEHICLE_PRICING",
+    "VEHICLE_SALES",
+  ],
 };
 
 export const TRAINING = {

@@ -1,9 +1,9 @@
 import { PropsWithChildren } from 'react';
-import { Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ViewStyle, StyleProp } from 'react-native';
 import { colors, spacing } from '@/theme';
 
 export const Screen = ({ children }: PropsWithChildren) => <View style={styles.screen}>{children}</View>;
-export const Card = ({ children, style }: PropsWithChildren<{ style?: ViewStyle }>) => <View style={[styles.card, style]}>{children}</View>;
+export const Card = ({ children, style }: PropsWithChildren<{ style?: StyleProp<ViewStyle> }>) => <View style={[styles.card, style]}>{children}</View>;
 export const Label = ({ children }: PropsWithChildren) => <Text style={styles.label}>{children}</Text>;
 export const Money = ({ value, large = false }: { value: number; large?: boolean }) => <Text style={[styles.money, large && styles.moneyLarge]}>{value < 0 ? '-' : ''}€{Math.abs(value).toLocaleString(undefined, { maximumFractionDigits: 2 })}</Text>;
 export const SectionTitle = ({ children }: PropsWithChildren) => <Text style={styles.section}>{children}</Text>;

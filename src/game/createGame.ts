@@ -7,13 +7,14 @@ import {
   defaultManagement,
   initialStaffState,
 } from "@/game/employees/employees";
+import { initialCarDealershipState } from "@/game/businesses/carDealership/carDealership";
 
 export const createGame = (
   firstName: string,
   lastName: string,
   age = 18,
 ): GameState => ({
-  schemaVersion: 4,
+  schemaVersion: 5,
   mode: "NORMAL",
   realEstate: initialRealEstate(START_DATE),
   player: {
@@ -33,6 +34,7 @@ export const createGame = (
   relationships: createDefaultFamily(),
   familyEvents: [],
   staff: initialStaffState(START_DATE),
+  carDealership: initialCarDealershipState(START_DATE),
   businesses: [
     {
       id: "reselling",

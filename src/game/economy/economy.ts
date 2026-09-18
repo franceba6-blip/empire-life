@@ -19,6 +19,7 @@ export function transact(
   const income =
     type === "PROPERTY_SALE" ||
     type === "PROPERTY_RENT" ||
+    type === "VEHICLE_SALE" ||
     type === "JOB_INCOME" ||
     type === "LOAN_RECEIVED" ||
     type === "FAMILY_LOAN_RECEIVED" ||
@@ -43,7 +44,7 @@ export function transact(
       ...state.stats,
       lifetimeIncome:
         state.stats.lifetimeIncome +
-        (["JOB_INCOME", "BUSINESS_REVENUE", "PROPERTY_RENT"].includes(type)
+        (["JOB_INCOME", "BUSINESS_REVENUE", "PROPERTY_RENT", "VEHICLE_SALE"].includes(type)
           ? amount
           : 0),
     },
@@ -61,6 +62,12 @@ export const businessValue = (state: GameState) =>
   state.businesses.reduce(
     (sum, business) =>
       sum + business.inventory.reduce((v, item) => v + item.marketValue, 0),
+    0,
+  ) + state.carDealership.dealerships.reduce(
+    (sum, dealership) =>
+      sum + dealership.vehicles
+        .filter((vehicle) => vehicle.status !== "SOLD")
+        .reduce((value, vehicle) => value + vehicle.estimatedMarketValue, 0),
     0,
   );
 export const netWorth = (state: GameState) =>
@@ -86,7 +93,7 @@ export const monthlyIncome = (state: GameState) =>
       (t) =>
         t.gameDate.year === state.date.year &&
         t.gameDate.month === state.date.month &&
-        ["JOB_INCOME", "BUSINESS_REVENUE", "PROPERTY_RENT"].includes(t.type),
+        ["JOB_INCOME", "BUSINESS_REVENUE", "PROPERTY_RENT", "VEHICLE_SALE"].includes(t.type),
     )
     .reduce((s, t) => s + t.amount, 0);
 export const monthlyExpenses = (state: GameState) =>
@@ -106,6 +113,13 @@ export const monthlyExpenses = (state: GameState) =>
           "FAMILY_HELP",
           "BUSINESS_PURCHASE",
           "BUSINESS_EXPENSE",
+          "DEALERSHIP_STARTUP",
+          "VEHICLE_PURCHASE",
+          "VEHICLE_INSPECTION",
+          "VEHICLE_REPAIR",
+          "VEHICLE_PREPARATION",
+          "VEHICLE_HOLDING_COST",
+          "DEALERSHIP_EXPANSION",
         ].includes(t.type),
     )
     .reduce((s, t) => s + t.amount, 0);

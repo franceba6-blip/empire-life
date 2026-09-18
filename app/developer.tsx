@@ -15,6 +15,11 @@ import {
   debugSpawnCandidates,
 } from "@/game/employees/employees";
 import { advanceGameTime, formatGameTime } from "@/game/time/time";
+import {
+  debugDealership,
+  debugHireDealershipTeam,
+  debugSpawnVehicles,
+} from "@/game/businesses/carDealership/carDealership";
 import { useGameStore } from "@/store/gameStore";
 import { colors } from "@/theme";
 export default function Developer() {
@@ -133,6 +138,16 @@ export default function Developer() {
             Staff debug changes are marked in employee history and never touch
             your normal save.
           </Text>
+          <SectionTitle>Debug car dealership</SectionTitle>
+          <PrimaryButton title="DEBUG · SPAWN 20 VEHICLE OFFERS" tone="dark" onPress={() => update((g) => debugSpawnVehicles(g, "TWENTY"))} />
+          <PrimaryButton title="DEBUG · SPAWN CHEAP PROFITABLE CAR" tone="dark" onPress={() => update((g) => debugSpawnVehicles(g, "PROFITABLE"))} />
+          <PrimaryButton title="DEBUG · SPAWN LUXURY VEHICLE" tone="dark" onPress={() => update((g) => debugSpawnVehicles(g, "LUXURY"))} />
+          <PrimaryButton title="DEBUG · SPAWN SUPERCAR" tone="dark" onPress={() => update((g) => debugSpawnVehicles(g, "SUPERCAR"))} />
+          <PrimaryButton title="DEBUG · REPUTATION 100" tone="dark" onPress={() => update((g) => debugDealership(g, "REPUTATION"))} />
+          <PrimaryButton title="DEBUG · MAX CAPACITY" tone="dark" onPress={() => update((g) => debugDealership(g, "CAPACITY"))} />
+          <PrimaryButton title="DEBUG · HIRE ELITE DEALERSHIP TEAM" tone="dark" onPress={() => update(debugHireDealershipTeam)} />
+          <PrimaryButton title="DEBUG · COMPLETE ALL WORK" tone="dark" onPress={() => update((g) => debugDealership(g, "COMPLETE_WORK"))} />
+          <PrimaryButton title="DEBUG · FORCE LISTED VEHICLE SALE" tone="dark" onPress={() => update((g) => debugDealership(g, "FORCE_SALE"))} />
           <SectionTitle>Recent debug transactions</SectionTitle>
           {game.transactions
             .filter((t) => t.type === "DEBUG_TRANSACTION")

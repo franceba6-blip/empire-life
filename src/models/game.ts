@@ -3,6 +3,7 @@ import type {
   BusinessManagement,
   StaffState,
 } from "@/game/employees/types";
+import type { CarDealershipState } from "@/game/businesses/carDealership/types";
 export type TransactionType =
   | "JOB_INCOME"
   | "LOAN_RECEIVED"
@@ -20,7 +21,15 @@ export type TransactionType =
   | "DEBUG_TRANSACTION"
   | "BUSINESS_PURCHASE"
   | "BUSINESS_REVENUE"
-  | "BUSINESS_EXPENSE";
+  | "BUSINESS_EXPENSE"
+  | "DEALERSHIP_STARTUP"
+  | "VEHICLE_PURCHASE"
+  | "VEHICLE_INSPECTION"
+  | "VEHICLE_REPAIR"
+  | "VEHICLE_PREPARATION"
+  | "VEHICLE_HOLDING_COST"
+  | "VEHICLE_SALE"
+  | "DEALERSHIP_EXPANSION";
 
 export interface GameDate {
   year: number;
@@ -86,7 +95,7 @@ export interface Sale {
 }
 export interface Business {
   id: string;
-  type: "RESELLING";
+  type: "RESELLING" | "CAR_DEALERSHIP";
   name: string;
   inventory: InventoryItem[];
   sales: Sale[];
@@ -195,7 +204,7 @@ export interface Stats {
   lifetimeIncome: number;
 }
 export interface GameState {
-  schemaVersion: 4;
+  schemaVersion: 5;
   realEstate: RealEstateState;
   mode: "NORMAL" | "TEST";
   player: Player;
@@ -209,6 +218,7 @@ export interface GameState {
   familyEvents: FamilyEvent[];
   businesses: Business[];
   staff: StaffState;
+  carDealership: CarDealershipState;
   stats: Stats;
   creditScore: number;
   settings: { haptics: boolean };

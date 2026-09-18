@@ -31,7 +31,7 @@ describe("employee lifecycle", () => {
   it("generates varied candidates and hires one", () => {
     const start = createGame("A", "B");
     const next = hireRole(start, "SALES_EMPLOYEE");
-    expect(start.staff.candidates.length).toBe(7);
+    expect(start.staff.candidates.length).toBeGreaterThanOrEqual(14);
     expect(next.staff.employees).toHaveLength(1);
     expect(next.staff.employees[0].history[0].type).toBe("HIRED");
   });
@@ -175,7 +175,7 @@ describe("staff persistence and debug isolation", () => {
     delete legacy.businesses[0].otherExpenses;
     legacy.businesses[0].expenses = 440;
     const migrated = migrateGameState(legacy);
-    expect(migrated.schemaVersion).toBe(4);
+    expect(migrated.schemaVersion).toBe(5);
     expect(migrated.businesses[0].productCosts).toBe(440);
     expect(migrated.staff.candidates.length).toBeGreaterThan(0);
   });

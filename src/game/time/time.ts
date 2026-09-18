@@ -10,6 +10,7 @@ import {
 } from "@/models/game";
 import { makeId } from "@/utils/id";
 import { processEmployeesDay } from "@/game/employees/employees";
+import { processCarDealershipDay } from "@/game/businesses/carDealership/carDealership";
 
 export const dateKey = (d: GameDate) =>
   `${d.year}-${String(d.month).padStart(2, "0")}`;
@@ -185,6 +186,7 @@ export function advanceGameTime(state: GameState, hours: number): GameState {
   for (let day = 1; day <= days; day += 1) {
     next = processPropertyDay(processFamilyDay(next, addDays(state.date, day)));
     next = processEmployeesDay(next);
+    next = processCarDealershipDay(next);
   }
   if (!days) next = { ...next, date: state.date };
   return resolveSales(next);
