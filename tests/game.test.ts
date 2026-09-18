@@ -39,6 +39,6 @@ describe('reselling',()=>{
 });
 describe('time and save shape',()=>{
   it('progresses across month boundary',()=>expect(addDays({year:2026,month:1,day:31},1)).toEqual({year:2026,month:2,day:1}));
-  it('serializes and restores the full state',()=>{const g=createGame('Ada','Lovelace');const restored=JSON.parse(JSON.stringify(g));expect(restored).toEqual(g);expect(restored.schemaVersion).toBe(3)});
-  it('migrates prompt 01 saves without losing the brother trust',()=>{const current=createGame('Ada','Lovelace');const legacy:any={...current,schemaVersion:1,relationships:[{id:'marco',name:'Marco',type:'BROTHER',trust:61}]};delete legacy.hour;delete legacy.familyEvents;const migrated=migrateGameState(legacy);expect(migrated.schemaVersion).toBe(3);expect(migrated.relationships).toHaveLength(5);expect(migrated.relationships.find(x=>x.relationType==='BROTHER')!.trust).toBe(61)});
+  it('serializes and restores the full state',()=>{const g=createGame('Ada','Lovelace');const restored=JSON.parse(JSON.stringify(g));expect(restored).toEqual(g);expect(restored.schemaVersion).toBe(4)});
+  it('migrates prompt 01 saves without losing the brother trust',()=>{const current=createGame('Ada','Lovelace');const legacy:any={...current,schemaVersion:1,relationships:[{id:'marco',name:'Marco',type:'BROTHER',trust:61}]};delete legacy.hour;delete legacy.familyEvents;delete legacy.staff;const migrated=migrateGameState(legacy);expect(migrated.schemaVersion).toBe(4);expect(migrated.relationships).toHaveLength(5);expect(migrated.relationships.find(x=>x.relationType==='BROTHER')!.trust).toBe(61);expect(migrated.staff.candidates.length).toBeGreaterThan(0)});
 });

@@ -5,7 +5,7 @@ import { makeId } from '@/utils/id';
 export function buyItem(state: GameState, offer: Omit<InventoryItem, 'id'> & { id: string }): GameState {
   const item = { ...offer, id: makeId('item') };
   let next = transact(state, 'BUSINESS_PURCHASE', offer.purchasePrice, `Purchased ${offer.name}`, item.id);
-  next = { ...next, businesses: next.businesses.map(b => b.type === 'RESELLING' ? { ...b, inventory: [...b.inventory, item], cashInvested: b.cashInvested + offer.purchasePrice, expenses: b.expenses + offer.purchasePrice } : b) };
+  next = { ...next, businesses: next.businesses.map(b => b.type === 'RESELLING' ? { ...b, inventory: [...b.inventory, item], cashInvested: b.cashInvested + offer.purchasePrice, expenses: b.expenses + offer.purchasePrice, productCosts: b.productCosts + offer.purchasePrice } : b) };
   return next;
 }
 
@@ -17,10 +17,17 @@ export function listItem(state: GameState, itemId: string, price: number): GameS
 export function resolveSales(state: GameState, roll = Math.random()): GameState {
   let next = state;
   const business = state.businesses.find(b => b.type === 'RESELLING')!;
+  const selling = business.management.delegations.find(
+    (assignment) => assignment.task === "SELLING" && assignment.mode !== "SELF",
+  );
+  const seller = state.staff.employees.find(
+    (employee) => employee.id === selling?.employeeId,
+  );
   for (const item of business.inventory.filter(i => i.listedPrice)) {
     const demandBoost = item.demand === 'High' ? 0.18 : item.demand === 'Low' ? -0.12 : 0;
     const priceRatio = item.listedPrice! / item.marketValue;
-    const chance = Math.max(0.05, Math.min(0.92, 1.15 - priceRatio * 0.65 + demandBoost));
+    const staffBoost = seller ? (seller.performance - 50) / 500 : 0;
+    const chance = Math.max(0.05, Math.min(0.96, 1.15 - priceRatio * 0.65 + demandBoost + staffBoost));
     if (roll <= chance) {
       const saleId = makeId('sale');
       next = transact(next, 'BUSINESS_REVENUE', item.listedPrice!, `Sold ${item.name}`, saleId);

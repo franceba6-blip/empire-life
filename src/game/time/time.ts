@@ -9,6 +9,7 @@ import {
   PersonMemory,
 } from "@/models/game";
 import { makeId } from "@/utils/id";
+import { processEmployeesDay } from "@/game/employees/employees";
 
 export const dateKey = (d: GameDate) =>
   `${d.year}-${String(d.month).padStart(2, "0")}`;
@@ -181,8 +182,10 @@ export function advanceGameTime(state: GameState, hours: number): GameState {
   const total = state.hour + Math.ceil(hours);
   const days = Math.floor(total / 24);
   let next = { ...state, hour: total % 24 };
-  for (let day = 1; day <= days; day += 1)
+  for (let day = 1; day <= days; day += 1) {
     next = processPropertyDay(processFamilyDay(next, addDays(state.date, day)));
+    next = processEmployeesDay(next);
+  }
   if (!days) next = { ...next, date: state.date };
   return resolveSales(next);
 }

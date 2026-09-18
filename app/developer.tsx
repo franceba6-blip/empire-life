@@ -9,6 +9,11 @@ import {
   SectionTitle,
 } from "@/components/ui";
 import { debugCash } from "@/game/economy/economy";
+import {
+  debugHireEliteManager,
+  debugMaxStaff,
+  debugSpawnCandidates,
+} from "@/game/employees/employees";
 import { advanceGameTime, formatGameTime } from "@/game/time/time";
 import { useGameStore } from "@/store/gameStore";
 import { colors } from "@/theme";
@@ -105,7 +110,28 @@ export default function Developer() {
           ))}
           <Text style={s.copy}>
             Time tools process real rent, expenses, mortgages, renovations and
-            family events. They affect this test save only.
+            family events, payroll, training and employee experience. They
+            affect this test save only.
+          </Text>
+          <SectionTitle>Debug staff tools</SectionTitle>
+          <PrimaryButton
+            title="DEBUG · REFRESH CANDIDATES"
+            tone="dark"
+            onPress={() => update(debugSpawnCandidates)}
+          />
+          <PrimaryButton
+            title="DEBUG · HIRE ELITE GENERAL MANAGER"
+            tone="dark"
+            onPress={() => update(debugHireEliteManager)}
+          />
+          <PrimaryButton
+            title="DEBUG · MAX ALL STAFF"
+            tone="dark"
+            onPress={() => update(debugMaxStaff)}
+          />
+          <Text style={s.copy}>
+            Staff debug changes are marked in employee history and never touch
+            your normal save.
           </Text>
           <SectionTitle>Recent debug transactions</SectionTitle>
           {game.transactions

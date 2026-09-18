@@ -1,4 +1,8 @@
 import { RealEstateState } from "@/game/realEstate/types";
+import type {
+  BusinessManagement,
+  StaffState,
+} from "@/game/employees/types";
 export type TransactionType =
   | "JOB_INCOME"
   | "LOAN_RECEIVED"
@@ -89,6 +93,10 @@ export interface Business {
   cashInvested: number;
   revenue: number;
   expenses: number;
+  productCosts: number;
+  salaryExpenses: number;
+  otherExpenses: number;
+  management: BusinessManagement;
 }
 
 export type RelationType =
@@ -187,7 +195,7 @@ export interface Stats {
   lifetimeIncome: number;
 }
 export interface GameState {
-  schemaVersion: 3;
+  schemaVersion: 4;
   realEstate: RealEstateState;
   mode: "NORMAL" | "TEST";
   player: Player;
@@ -200,6 +208,7 @@ export interface GameState {
   relationships: FamilyMember[];
   familyEvents: FamilyEvent[];
   businesses: Business[];
+  staff: StaffState;
   stats: Stats;
   creditScore: number;
   settings: { haptics: boolean };

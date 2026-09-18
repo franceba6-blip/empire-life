@@ -281,7 +281,7 @@ describe("migration and isolated test mode", () => {
     const { realEstate, mode, ...old } = original;
     const n = migrateGameState({ ...old, schemaVersion: 2 });
     expect(n.realEstate.properties).toEqual([]);
-    expect(n.schemaVersion).toBe(3);
+    expect(n.schemaVersion).toBe(4);
     expect(n.relationships).toEqual(original.relationships);
     expect(n.businesses).toEqual(original.businesses);
     expect(n.mode).toBe("NORMAL");

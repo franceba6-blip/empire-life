@@ -3,13 +3,17 @@ import { START_HOUR } from "@/config/balance";
 import { createDefaultFamily } from "@/game/relationships/defaultFamily";
 import { initialRealEstate } from "@/game/realEstate/realEstate";
 import { GameState } from "@/models/game";
+import {
+  defaultManagement,
+  initialStaffState,
+} from "@/game/employees/employees";
 export const SAVE_KEY = "empire-life.save.v1";
 export const TEST_SAVE_KEY = "empire-life.test.v1";
 export type SaveSlot = "NORMAL" | "TEST";
 export function migrateGameState(input: unknown): GameState {
   if (!input || typeof input !== "object") throw new Error("Invalid save");
   const parsed = input as Record<string, unknown>;
-  if (![1, 2, 3].includes(Number(parsed.schemaVersion)))
+  if (![1, 2, 3, 4].includes(Number(parsed.schemaVersion)))
     throw new Error("Unsupported save version");
   if (
     !parsed.player ||
@@ -52,9 +56,17 @@ export function migrateGameState(input: unknown): GameState {
   }
   return {
     ...state,
-    schemaVersion: 3,
+    schemaVersion: 4,
     mode: state.mode === "TEST" ? "TEST" : "NORMAL",
     realEstate: state.realEstate ?? initialRealEstate(state.date),
+    staff: state.staff ?? initialStaffState(state.date),
+    businesses: (state.businesses ?? []).map((business) => ({
+      ...business,
+      productCosts: business.productCosts ?? business.expenses ?? 0,
+      salaryExpenses: business.salaryExpenses ?? 0,
+      otherExpenses: business.otherExpenses ?? 0,
+      management: business.management ?? defaultManagement(),
+    })),
   };
 }
 export const saveKeyFor = (slot: SaveSlot) =>
